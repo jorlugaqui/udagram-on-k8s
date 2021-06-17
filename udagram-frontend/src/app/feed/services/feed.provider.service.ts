@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FeedItem, feedItemMocks } from '../models/feed-item.model';
 import { BehaviorSubject } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 import { ApiService } from '../../api/api.service';
+
+const API_FEED_HOST = environment.apiFeedHost;
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,9 @@ import { ApiService } from '../../api/api.service';
 export class FeedProviderService {
   currentFeed$: BehaviorSubject<FeedItem[]> = new BehaviorSubject<FeedItem[]>([]);
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) { 
+    this.api.setApiHost(API_FEED_HOST);
+  }
 
   async getFeed(): Promise<BehaviorSubject<FeedItem[]>> {
     const req = await this.api.get('/feed');

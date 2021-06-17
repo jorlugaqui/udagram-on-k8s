@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpBackend } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
-
-const API_HOST = environment.apiHost;
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +11,10 @@ export class ApiService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
-  token: string;
+  private token: string;
+  private host: string;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) { }
 
   static handleError(error: Error) {
     alert(error.message);
@@ -27,13 +25,18 @@ export class ApiService {
     return body || { };
   }
 
+  setApiHost(apiHost: string) {
+    this.host = apiHost;
+  }
+
   setAuthToken(token) {
-    this.httpOptions.headers = this.httpOptions.headers.append('Authorization', `jwt ${token}`);
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', `jwt ${token}`);
     this.token = token;
   }
 
   get(endpoint): Promise<any> {
-    const url = `${API_HOST}${endpoint}`;
+    debugger;
+    const url = `${this.host}${endpoint}`;
     const req = this.http.get(url, this.httpOptions).pipe(map(ApiService.extractData));
 
     return req
@@ -45,7 +48,7 @@ export class ApiService {
   }
 
   post(endpoint, data): Promise<any> {
-    const url = `${API_HOST}${endpoint}`;
+    const url = `${this.host}${endpoint}`;
     return this.http.post<HttpEvent<any>>(url, data, this.httpOptions)
             .toPromise()
             .catch((e) => {
@@ -55,6 +58,7 @@ export class ApiService {
   }
 
   async upload(endpoint: string, file: File, payload: any): Promise<any> {
+    debugger;
     const signed_url = (await this.get(`${endpoint}/signed-url/${file.name}`)).url;
 
     const headers = new HttpHeaders({'Content-Type': file.type});
@@ -72,4 +76,5 @@ export class ApiService {
       });
     });
   }
+
 }

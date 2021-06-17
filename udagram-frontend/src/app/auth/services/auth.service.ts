@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/api/api.service';
 import { catchError, tap } from 'rxjs/operators';
+
+const API_USER_HOST = environment.apiUserHost;
 
 const JWT_LOCALSTORE_KEY = 'jwt';
 const USER_LOCALSTORE_KEY = 'user';
@@ -13,6 +16,7 @@ const USER_LOCALSTORE_KEY = 'user';
 export class AuthService {
   currentUser$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   constructor( private api: ApiService ) {
+    this.api.setApiHost(API_USER_HOST);
     this.initToken();
   }
 
