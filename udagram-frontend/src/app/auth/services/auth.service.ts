@@ -16,7 +16,6 @@ const USER_LOCALSTORE_KEY = 'user';
 export class AuthService {
   currentUser$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   constructor( private api: ApiService ) {
-    this.api.setApiHost(API_USER_HOST);
     this.initToken();
   }
 
@@ -29,6 +28,7 @@ export class AuthService {
   }
 
   setTokenAndUser(token: string, user: User) {
+    this.api.setApiHost(API_USER_HOST);
     localStorage.setItem(JWT_LOCALSTORE_KEY, token);
     localStorage.setItem(USER_LOCALSTORE_KEY, JSON.stringify(user));
     this.api.setAuthToken(token);
@@ -36,6 +36,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<any> {
+    this.api.setApiHost(API_USER_HOST);
     return this.api.post('/users/auth/login',
               {email: email, password: password})
               .then((res) => {
@@ -52,6 +53,7 @@ export class AuthService {
   }
 
   register(user: User, password: string): Promise<any> {
+    this.api.setApiHost(API_USER_HOST);
     return this.api.post('/users/auth/',
               {email: user.email, password: password})
               .then((res) => {

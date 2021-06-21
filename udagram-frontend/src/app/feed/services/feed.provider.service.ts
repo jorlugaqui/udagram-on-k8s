@@ -13,10 +13,10 @@ export class FeedProviderService {
   currentFeed$: BehaviorSubject<FeedItem[]> = new BehaviorSubject<FeedItem[]>([]);
 
   constructor(private api: ApiService) { 
-    this.api.setApiHost(API_FEED_HOST);
   }
 
   async getFeed(): Promise<BehaviorSubject<FeedItem[]>> {
+    this.api.setApiHost(API_FEED_HOST);
     const req = await this.api.get('/feed');
     const items = <FeedItem[]> req.rows;
     this.currentFeed$.next(items);
@@ -24,6 +24,7 @@ export class FeedProviderService {
   }
 
   async uploadFeedItem(caption: string, file: File): Promise<any> {
+    this.api.setApiHost(API_FEED_HOST);
     const res = await this.api.upload('/feed', file, {caption: caption, url: file.name});
     const feed = [res, ...this.currentFeed$.value];
     this.currentFeed$.next(feed);
