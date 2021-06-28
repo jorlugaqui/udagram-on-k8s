@@ -1,0 +1,70 @@
+version: "3.8"
+services:
+  user-api-service:
+    container_name: user-api-service
+    build:
+      dockerfile: "udagram-api-user/Dockerfile"
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./udagram-api-user:/app:delegated
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+    environment:
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - AWS_BUCKET=${AWS_BUCKET}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_PROFILE=${AWS_PROFILE}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=development
+    command: sh -c "npm run dev"
+  feed-api-service:
+    container_name: feed-api-service
+    build:
+      dockerfile: "udagram-api-feed/Dockerfile"
+      context: .
+    ports:
+        - "8081:8081"
+    volumes:
+        - ./udagram-api-feed:/app:delegated
+        - /app/node_modules
+    stdin_open: true
+    tty: true
+    environment:
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - AWS_BUCKET=${AWS_BUCKET}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_PROFILE=${AWS_PROFILE}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=development
+    command: sh -c "npm run dev"
+  user-frontend-service:
+    container_name: user-frontend-service
+    build:
+      dockerfile: "udagram-frontend/Dockerfile"
+      context: .
+    ports:
+      - "8100:8100"
+    volumes:
+      - ./udagram-frontend:/usr/src/app:delegated
+    stdin_open: true
+    tty: true
+    environment:
+      - URL=${URL}
+  reverse-proxy-service:
+    container_name: reverse-proxy-service
+    build:
+      dockerfile: "reverse-proxy/Dockerfile"
+      context: .
+    ports:
+      - "80:80"
+    stdin_open: true
+    tty: true
