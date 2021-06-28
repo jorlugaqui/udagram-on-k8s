@@ -1,21 +1,18 @@
-# Use NodeJS base image
 FROM node:13
 
-# Create app directory in Docker
-WORKDIR /usr/src/app
+ENV NODE_ENV ${NODE_ENV}
 
-# Install app dependencies by copying
-# package.json and package-lock.json
-COPY package*.json ./
+WORKDIR /app
 
-# Install dependencies in Docker
+COPY udagram-api-feed/package*.json ./
+COPY udagram-api-feed/tsconfig.json ./
+
 RUN npm install
 
-# Copy app from local environment into the Docker image
-COPY . .
+COPY udagram-api-feed/ ./
 
-# Set the API’s port number
-EXPOSE 8080
+RUN npm run build
 
-# Define Docker’s behavior when the image is run
+EXPOSE 8081
+
 CMD ["npm", "run", "prod"]
