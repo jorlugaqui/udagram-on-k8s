@@ -54,11 +54,14 @@ services:
     ports:
       - "8100:8100"
     volumes:
-      - ./udagram-frontend:/usr/src/app:delegated
+      - ./udagram-frontend:/app:delegated
+      - /app/node_modules
     stdin_open: true
     tty: true
     environment:
       - URL=${URL}
+      - NODE_ENV=development
+    command: sh -c "ionic serve --address 0.0.0.0"
   reverse-proxy-service:
     container_name: reverse-proxy-service
     build:
