@@ -2,6 +2,7 @@ version: "3.8"
 services:
   user-api-service:
     container_name: user-api-service
+    image: jorlugaqui/udragram-on-k8s:user-api-service
     build:
       dockerfile: "udagram-api-user/Dockerfile"
       context: .
@@ -25,6 +26,7 @@ services:
     command: sh -c "npm run dev"
   feed-api-service:
     container_name: feed-api-service
+    image: jorlugaqui/udragram-on-k8s:feed-api-service
     build:
       dockerfile: "udagram-api-feed/Dockerfile"
       context: .
@@ -48,6 +50,7 @@ services:
     command: sh -c "npm run dev"
   user-frontend-service:
     container_name: user-frontend-service
+    image: jorlugaqui/udragram-on-k8s:user-frontend-service
     build:
       dockerfile: "udagram-frontend/Dockerfile"
       context: .
@@ -64,6 +67,7 @@ services:
     command: sh -c "ionic serve --address 0.0.0.0"
   reverse-proxy-service:
     container_name: reverse-proxy-service
+    image: jorlugaqui/udragram-on-k8s:reverse-proxy-service
     build:
       dockerfile: "reverse-proxy/Dockerfile"
       context: .
