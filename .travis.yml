@@ -13,6 +13,11 @@ install:
 before_script:
   - echo "no tests"
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 script:
   - docker --version # print the version for logging
   - docker compose build --parallel
