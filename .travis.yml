@@ -5,6 +5,9 @@ node_js:
 services:
   - docker
 
+before_install:
+  - sudo apt install --only-upgrade docker-ce -y
+
 # Pre-testing installs
 install:
   - echo "nothing needs to be installed"
@@ -12,11 +15,6 @@ install:
 # Scripts to be run such as tests
 before_script:
   - echo "no tests"
-
-addons:
-  apt:
-    packages:
-      - docker-ce
 
 script:
   - docker --version # print the version for logging
