@@ -16,4 +16,7 @@ before_script:
 script:
   - docker --version # print the version for logging
   - docker compose build --parallel
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker compose push
