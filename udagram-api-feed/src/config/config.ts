@@ -8,6 +8,7 @@ export const config = {
   'aws_profile': process.env.AWS_PROFILE,
   'aws_media_bucket': process.env.AWS_BUCKET,
   'url': process.env.URL,
+  'url_proxy': process.env.URL_PROXY,
   'jwt': {
     'secret': process.env.JWT_SECRET,
   },
