@@ -17,7 +17,7 @@ export class FeedProviderService {
 
   async getFeed(): Promise<BehaviorSubject<FeedItem[]>> {
     this.api.setApiHost(API_FEED_HOST);
-    const req = await this.api.get('/feed');
+    const req = await this.api.get('/');
     const items = <FeedItem[]> req.rows;
     this.currentFeed$.next(items);
     return Promise.resolve(this.currentFeed$);
@@ -25,7 +25,7 @@ export class FeedProviderService {
 
   async uploadFeedItem(caption: string, file: File): Promise<any> {
     this.api.setApiHost(API_FEED_HOST);
-    const res = await this.api.upload('/feed', file, {caption: caption, url: file.name});
+    const res = await this.api.upload('/', file, {caption: caption, url: file.name});
     const feed = [res, ...this.currentFeed$.value];
     this.currentFeed$.next(feed);
     return res;

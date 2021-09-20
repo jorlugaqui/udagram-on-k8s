@@ -1,16 +1,13 @@
-# Use NodeJS base image
-FROM node:13
+FROM beevelop/ionic:latest AS ionic
 
-ENV NODE_ENV ${NODE_ENV}
-
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY udagram-frontend/package*.json ./
-RUN npm clean-install
-RUN npm install -g ionic
+RUN npm ci
 
 COPY udagram-frontend/ ./
 
 RUN ionic build
 
-EXPOSE 8001
+FROM nginx:alpine
+COPY --from=ionic /usr/src/app/www /usr/share/nginx/html

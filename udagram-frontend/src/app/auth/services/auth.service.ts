@@ -37,7 +37,7 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<any> {
     this.api.setApiHost(API_USER_HOST);
-    return this.api.post('/users/auth/login',
+    return this.api.post('/auth/login',
               {email: email, password: password})
               .then((res) => {
                 this.setTokenAndUser(res.token, res.user);
@@ -54,7 +54,7 @@ export class AuthService {
 
   register(user: User, password: string): Promise<any> {
     this.api.setApiHost(API_USER_HOST);
-    return this.api.post('/users/auth/',
+    return this.api.post('/auth/',
               {email: user.email, password: password})
               .then((res) => {
                 this.setTokenAndUser(res.token, res.user);

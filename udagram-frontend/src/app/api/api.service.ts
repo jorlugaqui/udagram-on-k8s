@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpBackend } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -8,14 +7,7 @@ import { map } from 'rxjs/operators';
 })
 export class ApiService {
   httpOptions = {
-    headers: new HttpHeaders(
-      {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      }
-    )
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
   private token: string;
