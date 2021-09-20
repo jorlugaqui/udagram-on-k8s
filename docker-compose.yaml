@@ -11,8 +11,6 @@ services:
     volumes:
       - ./udagram-api-user:/app:delegated
       - /app/node_modules
-    stdin_open: true
-    tty: true
     environment:
       - POSTGRES_USERNAME=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -23,6 +21,8 @@ services:
       - AWS_PROFILE=${AWS_PROFILE}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=development
+      - URL=${URL}
+      - URL_PROXY=${URL_PROXY}
     command: sh -c "npm run dev"
   feed-api-service:
     container_name: feed-api-service
@@ -36,8 +36,6 @@ services:
         - ./udagram-api-feed:/app:delegated
         - /app/node_modules
         - $HOME/.aws:/root/.aws
-    stdin_open: true
-    tty: true
     environment:
       - POSTGRES_USERNAME=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -48,24 +46,9 @@ services:
       - AWS_PROFILE=${AWS_PROFILE}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=development
-    command: sh -c "npm run dev"
-  user-frontend-service:
-    container_name: user-frontend-service
-    image: jorlugaqui/udragram-on-k8s:user-frontend-service
-    build:
-      dockerfile: "udagram-frontend/Dockerfile"
-      context: .
-    ports:
-      - "8100:8100"
-    volumes:
-      - ./udagram-frontend:/app:delegated
-      - /app/node_modules
-    stdin_open: true
-    tty: true
-    environment:
       - URL=${URL}
-      - NODE_ENV=development
-    command: sh -c "ionic serve --address 0.0.0.0"
+      - URL_PROXY=${URL_PROXY}
+    command: sh -c "npm run dev"
   reverse-proxy-service:
     container_name: reverse-proxy-service
     image: jorlugaqui/udragram-on-k8s:reverse-proxy-service
@@ -73,6 +56,13 @@ services:
       dockerfile: "udagram-reverse-proxy/Dockerfile"
       context: .
     ports:
-      - "80:80"
-    stdin_open: true
-    tty: true
+      - "8000:8000"
+  user-frontend-service:
+    container_name: user-frontend-service
+    image: jorlugaqui/udragram-on-k8s:user-frontend-service
+    build:
+      dockerfile: "udagram-frontend/Dockerfile"
+      context: .
+    ports:
+      - "8100:80"
+    # command: sh -c "ionic serve --external"
